@@ -1,0 +1,13 @@
+services:
+  jupyter-mcp:
+    build: .
+    image: jupyter-mcp:latest
+    container_name: jupyter-mcp
+    ports:
+      - "4040:4040"
+    volumes:
+      - jupyter-work:/home/jovyan/work
+    restart: unless-stopped
+
+volumes:
+  jupyter-work:

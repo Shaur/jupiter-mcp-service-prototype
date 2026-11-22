@@ -1,0 +1,60 @@
+### Простой код: переменная сохранится в kernel'е между запросами
+POST http://localhost:8080/api/execute
+Content-Type: text/plain
+
+x = 40
+print('x =', x)
+
+### Тот же kernel: переменная x доступна
+POST http://localhost:8080/api/execute
+Content-Type: text/plain
+
+print(x + 2)
+
+### numpy (должен быть установлен в окружении Jupyter)
+POST http://localhost:8080/api/execute
+Content-Type: text/plain
+
+import numpy as np
+arr = np.arange(5)
+print('sum =', arr.sum())
+
+### Ошибка исполнения: контроллер вернёт 502 с текстом ошибки
+POST http://localhost:8080/api/execute
+Content-Type: text/plain
+
+print(1 / 0)
+
+### Запуск markdown-скрипта из scripts/hello-python.md
+POST http://localhost:8080/api/scripts/hello-python/run
+
+### Запуск Kotlin-скрипта (в Jupyter должно быть ядро kotlin, см. Dockerfile)
+POST http://localhost:8080/api/scripts/hello-kotlin/run
+
+### Поиск первой дублирующейся строки, python-скрипт (beta: оригинал в строке 2, дубликат в строке 4)
+POST http://localhost:8080/api/scripts/lines-identification-python/run
+Content-Type: application/json
+
+{"lines": ["alpha", "beta", "gamma", "beta", "alpha"]}
+
+### То же на Kotlin (первый запуск дольше: kernel подгружает klaxon из Maven Central)
+POST http://localhost:8080/api/scripts/lines-identification-kotlin/run
+Content-Type: application/json
+
+{"lines": ["alpha", "beta", "gamma", "beta", "alpha"]}
+
+### Без дубликатов
+POST http://localhost:8080/api/scripts/lines-identification-python/run
+Content-Type: application/json
+
+{"lines": ["alpha", "beta", "gamma"]}
+
+### Исполнение в конкретном ядре: сначала получи id ядра через list_kernels
+### или POST /api/kernels {"name": "kotlin"} (после установки Kotlin-ядра в Jupyter),
+### затем подставь его в заголовок X-Kernel-Id
+POST http://localhost:8080/api/execute
+Content-Type: text/plain
+X-Kernel-Id: ПОДСТАВЬ-ID-ЯДРА
+
+val x = 6 * 7
+println("kotlin: $x")
