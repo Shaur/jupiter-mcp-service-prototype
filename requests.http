@@ -28,7 +28,7 @@ print(1 / 0)
 ### Запуск markdown-скрипта из scripts/hello-python.md
 POST http://localhost:8080/api/scripts/hello-python/run
 
-### Запуск Kotlin-скрипта (в Jupyter должно быть ядро kotlin, см. Dockerfile)
+### Запуск Kotlin-скрипта (в Jupyter должно быть ядро kotlin, см. mcp-local/Dockerfile)
 POST http://localhost:8080/api/scripts/hello-kotlin/run
 
 ### Поиск первой дублирующейся строки, python-скрипт (beta: оригинал в строке 2, дубликат в строке 4)

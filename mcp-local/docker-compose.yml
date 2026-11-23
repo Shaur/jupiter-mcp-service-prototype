@@ -1,6 +1,8 @@
 services:
   jupyter-mcp:
-    build: .
+    build:
+      context: ..
+      dockerfile: mcp-local/Dockerfile
     image: jupyter-mcp:latest
     container_name: jupyter-mcp
     ports:

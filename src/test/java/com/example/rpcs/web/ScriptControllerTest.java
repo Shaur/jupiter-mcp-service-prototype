@@ -69,14 +69,17 @@ class ScriptControllerTest {
     }
 
     @Test
-    void run_payloadForNonTemplateScript_returns400() throws Exception {
+    void run_payloadToPlainScript_isExecutedAnyway() throws Exception {
+        // плейсхолдеров больше нет: payload доступен как переменная payload,
+        // скрипт, который его не использует, просто игнорирует тело запроса
         writeScript("demo", "python", "print(1)");
+        when(mcpService.executeInKernel(anyString(), anyString())).thenReturn("hello out");
 
         mockMvc.perform(post("/api/scripts/demo/run")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"lines\": [\"a\"]}"))
-                .andExpect(status().isBadRequest())
-                .andExpect(content().string(org.hamcrest.Matchers.containsString("__PAYLOAD_B64__")));
+                .andExpect(status().isOk())
+                .andExpect(content().string("hello out"));
     }
 
     @Test
